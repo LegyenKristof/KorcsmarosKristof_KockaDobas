@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btn1, btn2, btn3, btn4;
     private TextView textView1;
     private String eredmenyek;
-    private boolean ketKocka;
+    private boolean ketKocka, dobhatE;
+    private int animacioIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,32 +32,61 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageView2.setVisibility(View.GONE);
-                ketKocka = false;
+                if (dobhatE){
+                    imageView2.setVisibility(View.GONE);
+                    ketKocka = false;
+                }
             }
         });
 
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageView2.setVisibility(View.VISIBLE);
-                ketKocka = true;
+                if (dobhatE){
+                    imageView2.setVisibility(View.VISIBLE);
+                    ketKocka = true;
+                }
             }
         });
 
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dobas();
+                if (dobhatE){
+                    dobhatE = false;
+                    dobasAnimacio();
+                }
             }
         });
 
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reset();
+                if (dobhatE){
+                    reset();
+                }
             }
         });
+    }
+
+    private void dobasAnimacio(){
+        if (animacioIndex < 10){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    kepBeallitas((int) (Math.random() * 6 + 1), imageView1);
+                    if (ketKocka){
+                        kepBeallitas((int) (Math.random() * 6 + 1), imageView2);
+                    }
+                    animacioIndex++;
+                    dobasAnimacio();
+                }
+            }, 100);
+        }
+        else{
+            animacioIndex = 0;
+            dobas();
+        }
     }
 
     private void reset(){
@@ -113,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), sor, Toast.LENGTH_SHORT).show();
         eredmenyek = sor + "\n" + eredmenyek;
         textView1.setText(eredmenyek);
+        dobhatE = true;
     }
 
     private void init(){
@@ -125,5 +157,7 @@ public class MainActivity extends AppCompatActivity {
         textView1 = findViewById(R.id.textView1);
         eredmenyek = "";
         ketKocka = true;
+        dobhatE = true;
+        animacioIndex = 0;
     }
 }
