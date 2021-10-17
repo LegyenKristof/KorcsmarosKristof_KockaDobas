@@ -28,15 +28,60 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 imageView2.setVisibility(View.GONE);
+                ketKocka = false;
             }
         });
 
-        btn1.setOnClickListener(new View.OnClickListener() {
+        btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageView2.setVisibility(View.VISIBLE);
+                ketKocka = true;
             }
         });
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dobas();
+            }
+        });
+    }
+
+    private void kepBeallitas(int szam, ImageView imageView){
+        switch (szam){
+            case 1:
+                imageView.setImageResource(R.drawable.kocka1);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.kocka2);
+                break;
+            case 3:
+                imageView.setImageResource(R.drawable.kocka3);
+                break;
+            case 4:
+                imageView.setImageResource(R.drawable.kocka4);
+                break;
+            case 5:
+                imageView.setImageResource(R.drawable.kocka5);
+                break;
+            case 6:
+                imageView.setImageResource(R.drawable.kocka6);
+                break;
+        }
+    }
+
+    private void dobas(){
+        int randomSzam1 = (int) (Math.random() * 6 + 1);
+        kepBeallitas(randomSzam1, imageView1);
+        String sor = randomSzam1 + "\n";
+        if (ketKocka){
+            int randomSzam2 = (int) (Math.random() * 6 + 1);
+            kepBeallitas(randomSzam2, imageView2);
+            sor = String.format("%d (%d+%d)\n", randomSzam1 + randomSzam2, randomSzam1, randomSzam2);
+        }
+        eredmenyek = sor + eredmenyek;
+        textView1.setText(eredmenyek);
     }
 
     private void init(){
